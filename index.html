@@ -155,8 +155,8 @@
             border-radius: 8px;
             padding: 30px;
             position: relative;
-            min-height: 150px;
-            transition: all 0.3s ease;
+            height: 200px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             overflow: hidden;
             display: flex;
@@ -167,7 +167,6 @@
 
         .career-block:hover {
             background-color: #f0f0f0;
-            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
@@ -335,7 +334,8 @@
         .project-box-avatar.expanded::before,
         .project-box-ds.expanded::before,
         .project-box-cv.expanded::before,
-        .project-box-simulation.expanded::before {
+        .project-box-simulation.expanded::before,
+        .project-box-wip.expanded::before {
             display: none;
         }
 
@@ -546,14 +546,47 @@
         }
 
         .project-box-wip {
-            background: repeating-linear-gradient(
-                45deg,
-                #f0f0f0,
-                #f0f0f0 10px,
-                #e0e0e0 10px,
-                #e0e0e0 20px
-            );
+            background-image: url('images/workflow.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             position: relative;
+        }
+
+        .project-box-wip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .project-box-wip:hover::before {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .project-box-wip h3 {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-box-wip.expanded .project-content {
+            position: relative;
+            z-index: 1;
+            color: #333;
+        }
+
+        .project-box-wip.expanded .project-content p,
+        .project-box-wip.expanded .project-content li,
+        .project-box-wip.expanded .project-content strong {
+            color: #333;
+            text-shadow: none;
         }
 
 
@@ -738,7 +771,7 @@
             </div>
         </div>
 
-    
+
 
         <div class="section">
             <h2 class="section-title">Technical Highlights</h2>
@@ -755,14 +788,15 @@
             <h2 class="section-title">Project Experience</h2>
             <div class="projects-grid">
                 <div class="project-box project-box-wip" onclick="toggleProject(this, event)">
-                    <h3>Multi-purpose AI Agent with Self-improving Capability</h3>
+                    <h3>General AI Agent with Complex Task Handling Capability</h3>
                     <div class="project-content">
+                        <img src="images/workflow.png" alt="General AI Agent" onerror="this.style.display='none';">
                         <p>This project involves developing an advanced AI agent system capable of handling multiple tasks while continuously improving its performance through self-learning mechanisms.</p>
                         <p><strong>Key Features:</strong></p>
                         <ul>
                             <li>Multi-agent architecture for task distribution</li>
+                            <li>Complex workflow orchestration</li>
                             <li>Self-improving capabilities through feedback loops</li>
-                            <li>Adaptive learning from user interactions</li>
                             <li>Integration with various APIs and services</li>
                         </ul>
                         <p><em>Conducted as a research project under the supervision of professors at UCL.</em></p>
@@ -790,10 +824,10 @@
                         <p>Designed, developed and deployed an video-based AI avatar chat system outperforming most comparable applications in terms of latency and customizability. Built the system using React frontend, Python backend and Unity Engine. Integrated core components including ASR, TTS and LLM APIs, alongside a proprietary transformer-based deep learning model for avatar lip-sync. Implemented a multi-agent framework integrating memory management and RAG for information retrieval.</p>
                         <p><strong>Key Features:</strong></p>
                         <ul>
-                            <li>Real-time 3D avatar rendering and animation</li>
+                            <li>Real-time 3D avatar rendering and animation with Unity engine</li>
                             <li>Low-latency conversational AI integration</li>
                             <li>Natural language understanding and generation</li>
-                            <li>Unity engine integration for avatar visualization</li>
+                            <li>Deployment on AWS</li>
                         </ul>
                         <p><em>Conducted as the Msc Computer Science summer project at UCL.</em></p>
                     </div>
@@ -827,16 +861,16 @@
             if (event) {
                 event.stopPropagation();
             }
-            
+
             const isExpanded = box.classList.contains('expanded');
-            
+
             // Close all other expanded boxes
             document.querySelectorAll('.project-box.expanded').forEach(expandedBox => {
                 if (expandedBox !== box) {
                     expandedBox.classList.remove('expanded');
                 }
             });
-            
+
             // Toggle current box
             if (isExpanded) {
                 box.classList.remove('expanded');
@@ -849,13 +883,13 @@
         document.addEventListener('click', function(event) {
             const projectBoxes = document.querySelectorAll('.project-box');
             let clickedInsideBox = false;
-            
+
             projectBoxes.forEach(box => {
                 if (box.contains(event.target)) {
                     clickedInsideBox = true;
                 }
             });
-            
+
             if (!clickedInsideBox) {
                 projectBoxes.forEach(box => {
                     box.classList.remove('expanded');
